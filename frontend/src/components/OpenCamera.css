@@ -57,8 +57,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .camera-error {
@@ -70,14 +74,6 @@
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   text-align: center;
-}
-
-.camera-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-  position: relative;
 }
 
 .video-loading {
@@ -92,12 +88,6 @@
   z-index: 2;
 }
 
-.video-loading p {
-  color: #666;
-  margin: 0;
-  font-size: 0.9rem;
-}
-
 .camera-video {
   width: 100%;
   max-width: 640px;
@@ -106,31 +96,7 @@
   border: 2px solid #28a745;
   background-color: #000;
   min-height: 360px;
-    -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-}
-
-.camera-video.ready {
-  background-color: transparent;
-}
-
-.stop-camera-button {
-  padding: 0.5rem 1.5rem;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.stop-camera-button:hover {
-  background-color: #c82333;
-  transform: translateY(-1px);
-}
-
-.stop-camera-button:active {
-  transform: translateY(0);
+  box-sizing: border-box;
+  /* -webkit-transform: scaleX(-1);
+  transform: scaleX(-1); */
 }

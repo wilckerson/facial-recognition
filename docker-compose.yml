@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile
     container_name: facial-recognition-frontend
     ports:
-      - "3000:80"
+      - "5100:80"
     depends_on:
       - backend   
 
