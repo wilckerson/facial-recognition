@@ -27,7 +27,8 @@ function RegisterFace() {
             required
           />
         </div>
-        
+
+        <label>Face Picture</label>
         <TakeFacePicture />
         
         <button 
