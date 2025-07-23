@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FaceCamera from '../components/FaceCamera';
+import TakeFacePicture from '../components/TakeFacePicture';
 import './RegisterFace.css';
 
 function RegisterFace() {
@@ -28,7 +28,7 @@ function RegisterFace() {
           />
         </div>
         
-        <FaceCamera />
+        <TakeFacePicture />
         
         <button 
           type="button" 

@@ -105,7 +105,9 @@
   border-radius: 8px;
   border: 2px solid #28a745;
   background-color: #000;
-  min-height: 480px;
+  min-height: 360px;
+    -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
 .camera-video.ready {
