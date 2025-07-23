@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import FaceCamera from '../components/FaceCamera';
+import './RegisterFace.css';
 
 function RegisterFace() {
+  const [fullName, setFullName] = useState('');
+
+  const handleSave = () => {
+    // TODO: Implement save functionality
+    console.log('Saving user:', fullName);
+  };
+
   return (
-    <div>
+    <div className="register-face-container">
       <h2>Register Face</h2>
-      <p>Face registration functionality will be implemented here.</p>
+      <p>Enter your full name to register your face with the system.</p>
+      
+      <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+        <div className="form-group">
+          <label htmlFor="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+        
+        <FaceCamera />
+        
+        <button 
+          type="button" 
+          className="save-button"
+          onClick={handleSave}
+          disabled={!fullName.trim()}
+        >
+          Register
+        </button>
+      </form>
     </div>
   );
 }
