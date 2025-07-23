@@ -1,3 +1,9 @@
+.camera-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .camera-button {
   padding: 0.75rem 1.5rem;
   background-color: #28a745;
@@ -13,19 +19,116 @@
   justify-content: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  position: relative;
 }
 
-.camera-button:hover {
+.camera-button:hover:not(:disabled) {
   background-color: #218838;
   transform: translateY(-1px);
 }
 
-.camera-button:active {
+.camera-button:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.camera-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.camera-button.loading {
+  padding-left: 2rem;
 }
 
 .camera-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.camera-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.camera-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  position: relative;
+}
+
+.video-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.video-loading p {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.camera-video {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  border-radius: 8px;
+  border: 2px solid #28a745;
+  background-color: #000;
+  min-height: 480px;
+}
+
+.camera-video.ready {
+  background-color: transparent;
+}
+
+.stop-camera-button {
+  padding: 0.5rem 1.5rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stop-camera-button:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+.stop-camera-button:active {
+  transform: translateY(0);
 }
