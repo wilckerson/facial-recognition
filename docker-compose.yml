@@ -10,9 +10,17 @@ services:
     ports:
       - "5000:8080"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=FacialRecognitionDB;User Id=sa;Password=FacialRecognition2024!;TrustServerCertificate=true;
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=FacialRecognitionDB;User Id=sa;Password=FacialRecognition2025!;TrustServerCertificate=true;
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+    volumes:
+      # Mount source code for hot reloading
+      - ./backend:/app:cached
+      # Exclude build artifacts and dependencies from host
+      - /app/bin
+      - /app/obj
     depends_on:
       - sqlserver
 
