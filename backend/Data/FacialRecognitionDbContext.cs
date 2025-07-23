@@ -21,7 +21,6 @@ public class FacialRecognitionDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.FullName).IsRequired().HasMaxLength(500);
-            entity.Property(e => e.FaceDescriptorJSON).IsRequired();
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
         });
@@ -38,7 +37,8 @@ public class FacialRecognitionDbContext : DbContext
         {
             Id = adminId,
             FullName = "Admin",
-            FaceDescriptorJSON = "[]",
+            FaceDescriptorId = null,
+            FaceDescriptorJSON = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         });

@@ -11,8 +11,9 @@ public class User
     [Required]
     public string FullName { get; set; } = string.Empty;
 
-    [Required]
-    public string FaceDescriptorJSON { get; set; } = string.Empty;
+    public Guid? FaceDescriptorId { get; set; }
+    
+    public string? FaceDescriptorJSON { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

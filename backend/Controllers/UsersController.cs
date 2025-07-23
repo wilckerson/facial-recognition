@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
-using backend.Models;
 
 namespace backend.Controllers;
 
@@ -22,16 +21,19 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<object>>> GetUsers()
     {
-        try
-        {
-            var users = await _context.Users.ToListAsync();
-            return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving users");
-            return StatusCode(500, "Internal server error");
-        }
+        var users = await _context.Users.ToListAsync();
+        return Ok(users);
+    }
+
+    // GET: api/users/face-descriptor
+    [HttpGet("face-descriptor")]
+    public async Task<ActionResult<IEnumerable<object>>> GetFaceDescriptors()
+    {
+        var users = await _context.Users
+            .Where(u => u.FaceDescriptorId != null)
+            .Select(u => new { u.FaceDescriptorId, u.FullName, u.FaceDescriptorJSON })
+            .ToListAsync();
+        return Ok(users);
     }
 
 }
