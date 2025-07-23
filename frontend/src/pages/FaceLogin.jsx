@@ -1,10 +1,10 @@
 import React from 'react';
-
+import OpenCamera from '../components/OpenCamera';
 function FaceLogin() {
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'  }}>
       <h2>Face Login</h2>
-      <p>Face login functionality will be implemented here.</p>
+      <OpenCamera />
     </div>
   );
 }

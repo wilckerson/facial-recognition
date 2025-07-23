@@ -4,11 +4,16 @@ import './RegisterFace.css';
 
 function RegisterFace() {
   const [fullName, setFullName] = useState('');
+  const [capturedImage, setCapturedImage] = useState(null);
 
   const handleSave = () => {
     // TODO: Implement save functionality
     console.log('Saving user:', fullName);
   };
+
+  function handleOnPictureCaptured(imageBase64) {
+    setCapturedImage(imageBase64);
+  }
 
   return (
     <div className="register-face-container">
@@ -29,13 +34,13 @@ function RegisterFace() {
         </div>
 
         <label>Face Picture</label>
-        <TakeFacePicture />
-        
-        <button 
-          type="button" 
+        <TakeFacePicture onPictureCaptured={handleOnPictureCaptured} />
+
+        <button
+          type="button"
           className="save-button"
           onClick={handleSave}
-          disabled={!fullName.trim()}
+          disabled={!fullName.trim() || !capturedImage}
         >
           Register
         </button>

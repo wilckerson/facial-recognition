@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import OpenCamera from "./OpenCamera";
 import CameraIcon from "./icons/CameraIcon";
 
-export default function TakeFacePicture() {
+export default function TakeFacePicture({onPictureCaptured}) {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const videoRef = useRef(null);
@@ -39,7 +39,7 @@ export default function TakeFacePicture() {
     const base64Image = canvas.toDataURL("image/jpeg", 0.8);
 
     setCapturedImage(base64Image);
-    console.log("Captured image as base64:", base64Image);
+    onPictureCaptured && onPictureCaptured(base64Image);
   };
 
   return (
