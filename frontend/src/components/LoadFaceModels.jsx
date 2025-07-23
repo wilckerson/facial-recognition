@@ -8,22 +8,35 @@ export default function LoadFaceModels({ onModelsLoaded }) {
   useEffect(() => {
     const loadModels = async () => {
       try {
+        const modelsLoadedFromStorage = sessionStorage.getItem('faceModelsLoaded');
+        if (modelsLoadedFromStorage === 'true') {
+          console.log('Face models already loaded from previous session');
+          setError(null);
+          setLoading(false);
+          onModelsLoaded();
+          return;
+        }
+
+        console.log('Loading face models...');
         const uri = "/models";
         await faceapi.nets.ssdMobilenetv1.loadFromUri(uri);
         await faceapi.nets.faceLandmark68Net.loadFromUri(uri);
         await faceapi.nets.faceRecognitionNet.loadFromUri(uri);
 
+        sessionStorage.setItem('faceModelsLoaded', 'true');
         setError(null);
         setLoading(false);
         onModelsLoaded();
       } catch (error) {
         console.error("Error loading models:", error);
         setError("Failed to load face models.");
+        setLoading(false);
+        sessionStorage.removeItem('faceModelsLoaded');
       }
     };
 
     loadModels();
-  }, []);
+  }, [onModelsLoaded]);
 
   return (
     <div className="load-models-container">

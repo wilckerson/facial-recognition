@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import OpenCamera from "./OpenCamera";
 import CameraIcon from "./icons/CameraIcon";
 import LoadFaceModels from "./LoadFaceModels";
@@ -10,6 +10,7 @@ export default function TakeFacePicture({ onPictureCaptured }) {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
+  const [detectedFaceDescriptor, setDetectedFaceDescriptor] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const faceDetectionCanvasRef = useRef(null);
@@ -29,8 +30,6 @@ export default function TakeFacePicture({ onPictureCaptured }) {
       console.error("Video element not found");
       return;
     }
-
-    // Create canvas element if it doesn't exist
     if (!canvasRef.current) {
       canvasRef.current = document.createElement("canvas");
     }
@@ -39,14 +38,10 @@ export default function TakeFacePicture({ onPictureCaptured }) {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    // Set canvas dimensions to match video
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-
-    // Draw the current video frame to canvas
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Convert canvas to base64 image
     const base64Image = canvas.toDataURL("image/jpeg", 0.8);
 
     setCapturedImage(base64Image);
@@ -55,15 +50,20 @@ export default function TakeFacePicture({ onPictureCaptured }) {
   };
 
   const scanFace = async () => {
-    if (capturedImage || !videoRef.current || !faceDetectionCanvasRef.current || !modelsLoaded) {
-      return;
-    }
-    
     const videoWidth = videoRef.current.width || 640;
     const videoHeight = videoRef.current.height || 360;
 
     faceapi.matchDimensions(faceDetectionCanvasRef.current, videoRef.current);
     const faceApiInterval = setInterval(async () => {
+      if (
+        capturedImage ||
+        !videoRef.current ||
+        !faceDetectionCanvasRef.current ||
+        !modelsLoaded
+      ) {
+        return;
+      }
+
       const detections = await faceapi
         .detectAllFaces(videoRef.current)
         .withFaceLandmarks()
@@ -72,7 +72,11 @@ export default function TakeFacePicture({ onPictureCaptured }) {
         width: videoWidth,
         height: videoHeight,
       });
-      const bestDetection = resizedDetections && resizedDetections.length > 0 ? resizedDetections[0] : null;
+      const bestDetection =
+        resizedDetections && resizedDetections.length > 0
+          ? resizedDetections[0]
+          : null;
+      setDetectedFaceDescriptor(bestDetection);
 
       faceDetectionCanvasRef.current
         .getContext("2d")
@@ -90,6 +94,16 @@ export default function TakeFacePicture({ onPictureCaptured }) {
     faceApiIntervalRef.current = faceApiInterval;
   };
 
+  // Cleanup interval when component unmounts
+  useEffect(() => {
+    return () => {
+      if (faceApiIntervalRef.current) {
+        clearInterval(faceApiIntervalRef.current);
+        faceApiIntervalRef.current = null;
+      }
+    };
+  }, []);
+
   return (
     <div>
       {/* Note: Removing this from the DOM after capturing was causing problem. So, using the display property fixed it. */}
@@ -106,7 +120,7 @@ export default function TakeFacePicture({ onPictureCaptured }) {
             style={{
               position: "absolute",
               top: 0,
-              left: 0
+              left: 0,
             }}
           />
         )}
@@ -114,9 +128,14 @@ export default function TakeFacePicture({ onPictureCaptured }) {
       <LoadFaceModels onModelsLoaded={handleOnModelsLoaded} />
       {!capturedImage && isCameraActive && (
         <p>
+          {detectedFaceDescriptor === null && <h4 style={{ color: "red", fontSize: "0.8rem" }}>
+            No face was detected yet.
+          </h4>}
           <button
             type="button"
-            style={{
+            style={detectedFaceDescriptor === null ? {
+              cursor: "not-allowed",
+            } : {
               backgroundColor: "#28a745",
               color: "#fff",
               padding: "10px 20px",
@@ -126,6 +145,7 @@ export default function TakeFacePicture({ onPictureCaptured }) {
               marginBottom: "1rem",
             }}
             onClick={takePicture}
+            disabled={detectedFaceDescriptor === null}
           >
             <CameraIcon />
             &nbsp; Take Picture
