@@ -31,7 +31,15 @@ services:
       dockerfile: Dockerfile
     container_name: facial-recognition-frontend
     ports:
-      - "5100:80"
+      - "5100:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    volumes:
+      # Mount source code for hot reloading
+      - ./frontend:/app:cached
+      # Exclude node_modules from host to avoid conflicts
+      - /app/node_modules
     depends_on:
       - backend   
 
