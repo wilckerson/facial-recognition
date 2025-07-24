@@ -34,9 +34,7 @@ function RegisterFace() {
       });
 
       if (response.ok) {
-        const result = await response.json();
         setMessage('User registered successfully!');
-        console.log('Registration successful:', result);
         
         // Reset form after successful registration
         setFullName('');
