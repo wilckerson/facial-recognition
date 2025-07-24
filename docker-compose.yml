@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Backend .NET API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: facial-recognition-backend
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=FacialRecognitionDB;User Id=sa;Password=FacialRecognition2025!;TrustServerCertificate=true;
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+    volumes:
+      # Mount source code for hot reloading
+      - ./backend:/app:cached
+      # Exclude build artifacts and dependencies from host
+      - /app/bin
+      - /app/obj
+    depends_on:
+      - sqlserver
+
+  # Frontend React Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: facial-recognition-frontend
+    ports:
+      - "5100:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    volumes:
+      # Mount source code for hot reloading
+      - ./frontend:/app:cached
+      # Exclude node_modules from host to avoid conflicts
+      - /app/node_modules
+    depends_on:
+      - backend   
+
+  # Microsoft SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: facial-recognition-sqlserver
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=FacialRecognition2025!
+      - MSSQL_PID=Express
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./database/mssql-init:/docker-entrypoint-initdb.d
+   
+# Volumes
+volumes:
+  sqlserver_data:
+    driver: local
+    name: facial-recognition-sqlserver-data
