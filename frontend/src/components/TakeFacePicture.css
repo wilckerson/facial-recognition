@@ -1,0 +1,63 @@
+.take-face-picture-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.face-detection-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.no-face-warning {
+  color: red;
+  font-size: 0.8rem;
+  margin: 0;
+}
+.take-picture-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.take-picture-button {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.take-picture-button:disabled {
+  cursor: not-allowed;
+  background-color: #6c757d;
+}
+
+.captured-image {
+  max-width: 300px;
+  max-height: 300px;
+  border: 2px solid #28a745;
+  border-radius: 8px;
+}
+
+.image-actions {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.retake-button {
+  background-color: #6c757d;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+}

@@ -8,16 +8,12 @@ export default function LoadFaceModels({ onModelsLoaded }) {
   useEffect(() => {
     const loadModels = async () => {
       try {
-        const modelsLoadedFromStorage = sessionStorage.getItem('faceModelsLoaded');
-        if (modelsLoadedFromStorage === 'true') {
-          console.log('Face models already loaded from previous session');
-          setError(null);
+        if(window.modelsLoaded){
           setLoading(false);
           onModelsLoaded();
           return;
         }
-
-        console.log('Loading face models...');
+        
         const uri = "/models";
         await faceapi.nets.ssdMobilenetv1.loadFromUri(uri);
         await faceapi.nets.faceLandmark68Net.loadFromUri(uri);
@@ -26,12 +22,12 @@ export default function LoadFaceModels({ onModelsLoaded }) {
         sessionStorage.setItem('faceModelsLoaded', 'true');
         setError(null);
         setLoading(false);
+        window.modelsLoaded = true; // Set global flag to indicate models are loaded
         onModelsLoaded();
       } catch (error) {
         console.error("Error loading models:", error);
         setError("Failed to load face models.");
         setLoading(false);
-        sessionStorage.removeItem('faceModelsLoaded');
       }
     };
 

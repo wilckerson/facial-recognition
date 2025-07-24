@@ -5,14 +5,16 @@ import './RegisterFace.css';
 function RegisterFace() {
   const [fullName, setFullName] = useState('');
   const [capturedImage, setCapturedImage] = useState(null);
+  const [detectedFaceDescriptor, setDetectedFaceDescriptor] = useState(null);
 
   const handleSave = () => {
     // TODO: Implement save functionality
-    console.log('Saving user:', fullName);
+    console.log('Saving user:', fullName, detectedFaceDescriptor);
   };
 
-  function handleOnPictureCaptured(imageBase64) {
+  function handleOnPictureCaptured(imageBase64, detectedFaceDescriptor) {
     setCapturedImage(imageBase64);
+    setDetectedFaceDescriptor(detectedFaceDescriptor);
   }
 
   return (

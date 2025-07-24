@@ -3,6 +3,7 @@ import OpenCamera from "./OpenCamera";
 import CameraIcon from "./icons/CameraIcon";
 import LoadFaceModels from "./LoadFaceModels";
 import * as faceapi from "face-api.js";
+import "./TakeFacePicture.css";
 
 const FACE_DETECTIONS_PER_SECOND = 1;
 
@@ -46,7 +47,7 @@ export default function TakeFacePicture({ onPictureCaptured }) {
 
     setCapturedImage(base64Image);
     clearInterval(faceApiIntervalRef.current);
-    onPictureCaptured && onPictureCaptured(base64Image);
+    onPictureCaptured && onPictureCaptured(base64Image, detectedFaceDescriptor);
   };
 
   const scanFace = async () => {
@@ -105,7 +106,7 @@ export default function TakeFacePicture({ onPictureCaptured }) {
   }, []);
 
   return (
-    <div>
+    <div className="take-face-picture-container">
       {/* Note: Removing this from the DOM after capturing was causing problem. So, using the display property fixed it. */}
       <div
         style={{
@@ -117,40 +118,26 @@ export default function TakeFacePicture({ onPictureCaptured }) {
         {isCameraActive && (
           <canvas
             ref={faceDetectionCanvasRef}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-            }}
+            className="face-detection-canvas"
           />
         )}
       </div>
       <LoadFaceModels onModelsLoaded={handleOnModelsLoaded} />
       {!capturedImage && isCameraActive && (
-        <p>
-          {detectedFaceDescriptor === null && <h4 style={{ color: "red", fontSize: "0.8rem" }}>
-            No face was detected yet.
-          </h4>}
+        <div className="take-picture-container">
+          {detectedFaceDescriptor === null && (
+            <h4 className="no-face-warning">No face was detected yet.</h4>
+          )}
           <button
             type="button"
-            style={detectedFaceDescriptor === null ? {
-              cursor: "not-allowed",
-            } : {
-              backgroundColor: "#28a745",
-              color: "#fff",
-              padding: "10px 20px",
-              borderRadius: "5px",
-              border: "none",
-              cursor: "pointer",
-              marginBottom: "1rem",
-            }}
+            className="take-picture-button"
             onClick={takePicture}
             disabled={detectedFaceDescriptor === null}
           >
             <CameraIcon />
-            &nbsp; Take Picture
+            Take Picture
           </button>
-        </p>
+        </div>
       )}
 
       {capturedImage && (
@@ -158,28 +145,12 @@ export default function TakeFacePicture({ onPictureCaptured }) {
           <img
             src={capturedImage}
             alt="Captured face"
-            style={{
-              maxWidth: "300px",
-              maxHeight: "300px",
-              border: "2px solid #28a745",
-              borderRadius: "8px",
-              // transform: "scaleX(-1)",
-            }}
+            className="captured-image"
           />
-          <div
-            style={{ marginTop: "0.5rem", fontSize: "0.8rem", color: "#666" }}
-          >
+          <div className="image-actions">
             <button
               type="button"
-              style={{
-                backgroundColor: "#6c757d",
-                color: "#fff",
-                padding: "5px 10px",
-                borderRadius: "3px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.8rem",
-              }}
+              className="retake-button"
               onClick={() => setCapturedImage(null)}
             >
               Retake Picture
