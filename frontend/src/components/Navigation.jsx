@@ -7,6 +7,7 @@ function Navigation() {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
+          <img src="/logo.svg" alt="Facial Recognition Logo" className="nav-logo-img" />
           Facial Recognition
         </Link>
         <div className="nav-menu">

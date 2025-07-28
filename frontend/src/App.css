@@ -5,3 +5,22 @@
   text-align: center;
 }
 
+.App {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+main {
+  min-height: calc(100vh - 60px); /* Assuming navigation height */
+}
+
+/* Global improvements */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
